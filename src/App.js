@@ -11,6 +11,8 @@ import {
   CardMedia,
   Container,
   Grid,
+  ImageList,
+  ImageListItem,
   Link,
   Stack,
   Typography,
@@ -46,34 +48,59 @@ function App() {
     };
   }, [handleScroll, loading]);
 
-  const [showText, setShowText] = useState(true);
-  const expendMoredetails = () => {
-    
-  }
+  const [showText, setShowText] = useState({});
+
+  const expendMoredetails = (id) => {
+    setShowText((prevShowText) => ({
+      ...prevShowText,
+      [id]: !prevShowText[id],
+    }));
+  };
+  console.log(showText, "showText");
   return (
     <>
-      <Container maxWidth="lg">
-        <Typography variant="h4" align="center" style={{ marginTop: "50px" }}>
-          Material Card
-        </Typography>
+      <Container maxWidth="lg" color="#212121">
         <Grid container spacing={5} style={{ marginTop: "20px" }}>
           {data.length !== 0 &&
             data?.jdList.map((item) => (
               <Grid item xs={12} ms={4} sm={4} key={item.jdUid}>
                 <Card
                   sx={{ maxWidth: 345 }}
-                  style={{ padding: "10px", marginBottom: "50px" }}
+                  style={{ padding: "10px", marginBottom: "20px" }}
                 >
-                  {/* <CardActionArea>
-                  </CardActionArea> */}
                   <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                      Weekdays
+                    <Typography color={"#212121"} fontSize="20px" >
+                      <img    
+                        cols={2}
+                          style={{width:'50px'}}
+                          // srcSet={`${item.logoUrl}`}
+                          src={`${item.logoUrl}`}
+                          alt={item.companyName}
+                          loading="lazy"
+                        /><span> {item.companyName}</span>
                     </Typography>
+                    <Typography
+                    cols={6}
+                      gutterBottom
+                      variant="h5"
+                      component="div"
+                      color={"#616161"}
+                      fontSize="25px"
+                    >
+                      <Typography color={"#212121"} fontSize="20px">
+                        {item.jobRole[0].toUpperCase() + item.jobRole.slice(1)}{" "}
+                        ({item.location})
+                      </Typography>
+                      <Typography color="#757575">
+                        Estimated Salary:{" "}
+                        <span>{`$${item.minJdSalary} - ${item.maxJdSalary} ${item.salaryCurrencyCode}`}</span>
+                      </Typography>
+                    </Typography>
+                    <Typography color="#212121">About Company:</Typography>
                     <Typography
                       variant="body2"
                       color="text.secondary"
-                      className={showText ? "truncate4_line" : ""}
+                      className={showText[item.jdUid] ? "" : "truncate4_line"}
                     >
                       {item.jobDetailsFromCompany}
                     </Typography>
@@ -83,7 +110,6 @@ function App() {
                       alignItems="center"
                     >
                       <Button
-                        href="#text-buttons"
                         style={{
                           textTransform: "capitalize",
                           padding: 0,
@@ -94,13 +120,13 @@ function App() {
                         View Job
                       </Button>
                     </Stack>
+                    <Typography color="#757575">
+                      {item.minExp &&
+                        `Experience: ${item.minExp} -${item.maxExp} years`}
+                    </Typography>
                   </CardContent>
                   <Stack spacing={1}>
-                    <Button variant="contained">
-                      <Link
-                        href="https://weekday.works"
-                        variant="button"
-                      ></Link>
+                    <Button href="https://weekday.works" variant="contained">
                       Apply Now
                     </Button>
                   </Stack>
