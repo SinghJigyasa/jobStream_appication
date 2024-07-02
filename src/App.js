@@ -1,44 +1,41 @@
 import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { fetchApiData } from "./redux/slice";
-
 import JobCard from "./component/jobCard";
 import { Container, Grid } from "@mui/material";
+import { useRef } from "react";
 
 function App() {
-  const [offSet, setOffSet] = useState(0);
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector((state) => state.data);
+  const offSetRef = useRef(0);
 
   useEffect(() => {
-    dispatch(fetchApiData(offSet));
-    setOffSet((pre) => pre + 1);
+    dispatch(fetchApiData(offSetRef.current));
+    offSetRef.current += 1;
   }, [dispatch]);
 
   const handleScroll = useCallback(() => {
-    if (
-    window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || loading
-    ) {
-      return;
+    if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 1) {
+      dispatch(fetchApiData(offSetRef.current));
+      offSetRef.current += 1;
     }
-    dispatch(fetchApiData(offSet));
-    setOffSet((pre) => pre + 1);
-  }, [data.length, dispatch, loading]);
+  }, [dispatch]);
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
-  }, [handleScroll, loading]);
+  }, [handleScroll]);
 
- 
+  
   return (
       <Container maxWidth="lg" color="#212121">
         <Grid container spacing={5} style={{ marginTop: "20px" }}>
           {data.length !== 0 &&
-            data?.jdList.map((item) => <JobCard cardData={item} />)}
+            data?.jdList.map((item) => <JobCard key={item.jdUid} cardData={item} />)}
         </Grid>
       </Container>  
   );

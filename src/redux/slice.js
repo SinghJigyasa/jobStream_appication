@@ -5,9 +5,8 @@ export const fetchApiData = createAsyncThunk(
   'api/fetchData',
   async (offset, thunkAPI) => {
     const requestOptions = {
-      headers: {
         'Content-Type': 'application/json'
-      }
+      
     };
 
     const payload = {

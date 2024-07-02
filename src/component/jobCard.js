@@ -1,14 +1,8 @@
-import {
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Button, Card, CardContent, Grid, Stack, Typography} from "@mui/material";
 import { useState } from "react";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+
 const JobCard = (props) => {
   const {
     jdUid,
@@ -34,7 +28,7 @@ const JobCard = (props) => {
   };
   return (
 
-        <Grid item xs={12} ms={4} sm={4} key={jdUid}>
+        <Grid item xs={12} ms={4} sm={4}>
           <Card
             sx={{ maxWidth: 345 }} 
             style={{ padding: "5px",margin:'10px', marginBottom: "20px", height:'100%', justifyContent: 'space-between'}}
@@ -44,7 +38,6 @@ const JobCard = (props) => {
                 <img
                   cols={2}
                   style={{ width: "50px" }}
-                  // srcSet={`${item.logoUrl}`}
                   src={`${logoUrl}`}
                   alt={companyName}
                   loading="lazy"
