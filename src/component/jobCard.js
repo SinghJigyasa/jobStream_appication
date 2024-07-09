@@ -28,12 +28,12 @@ const JobCard = (props) => {
   };
   return (
 
-        <Grid item xs={12} ms={4} sm={4}>
-          <Card
-            sx={{ maxWidth: 345 }} 
-            style={{ padding: "5px",margin:'10px', marginBottom: "20px", height:'100%', justifyContent: 'space-between'}}
+        <Grid item xs={12} ms={4} sm={4}  >
+          <Card  
+            // sx={{ maxWidth: 345 }} 
+            style={{ padding: "5px", margin: '10px', height: '100%',}}
           >
-            <CardContent>
+            <CardContent margin={'20px'}>
               <Typography color={"#212121"} fontSize="20px">
                 <img
                   cols={2}
