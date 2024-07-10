@@ -7,83 +7,110 @@ import {
   Select,
   MenuItem,
   Button,
+  Input,
+  debounce,
 } from "@mui/material";
+import { experienceOptions, jobTypeOptions, roleTypeOptions } from "./uitil";
 
-const SearchForm = () => {
-  const [country, setCountry] = useState("");
-  const [state, setState] = useState("");
-  const [city, setCity] = useState("");
-  const [minExperience, setMinExperience] = useState("");
-  const [maxExperience, setMaxExperience] = useState("");
+/**
+ * Min experience
+Company name
+Location
+Remote/on-site
+Tech stack
+Role
+Min base pay
 
-  const handleCountryChange = (event) => setCountry(event.target.value);
-  const handleStateChange = (event) => setState(event.target.value);
-  const handleCityChange = (event) => setCity(event.target.value);
-  const handleMinExperienceChange = (event) =>
-    setMinExperience(event.target.value);
-  const handleMaxExperienceChange = (event) =>
-    setMaxExperience(event.target.value);
+ */
+const SearchForm = ({ filterValue, setFilterValue, handleSearch }) => {
 
-  const handleSearch = () => {
-    // Handle the search logic here
-    console.log({ country, state, city, minExperience, maxExperience });
+  
+  const handleFilter = (e) => {
+    setFilterValue({ ...filterValue, [e.target.name]: e.target.value });
+  };
+  const menuProps = {
+    anchorOrigin: {
+      vertical: "bottom",
+      horizontal: "left",
+    },
+    transformOrigin: {
+      vertical: "top",
+      horizontal: "left",
+    },
+    getcontentanchorel: null,
+    PaperProps: {
+      style: {
+        maxHeight: 48 * 4.5 + 8, // Sets a maximum height for the dropdown
+      },
+    },
   };
 
   return (
     <Container>
       <h1>Advance Search</h1>
       <Grid container spacing={2}>
-        <Grid item xs={12} ms={4} sm={4}>
+        <Grid item xs={12} sm={6} md={3} sx={{ marginRight: 4 , marginLeft: 3}}>
           <FormControl fullWidth>
-            <InputLabel>Select country</InputLabel>
-            <Select value={country} onChange={handleCountryChange}>
-              <MenuItem value="">None</MenuItem>
-              <MenuItem value="country1">Country 1</MenuItem>
-              <MenuItem value="country2">Country 2</MenuItem>
+            <Select
+              variant="standard"
+              value={filterValue.jobType}
+              onChange={(e) => handleFilter(e)}
+              name="jobType"
+              MenuProps={menuProps}
+            >
+              {jobTypeOptions.map((option, idx) => (
+                <MenuItem key={idx} value={option.value}>
+                  {option.Label}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={3} sx={{ marginRight: 4 ,marginLeft: 2 }}>
           <FormControl fullWidth>
-            <InputLabel>Select state</InputLabel>
-            <Select value={state} onChange={handleStateChange}>
-              <MenuItem value="">None</MenuItem>
-              <MenuItem value="state1">State 1</MenuItem>
-              <MenuItem value="state2">State 2</MenuItem>
+            <Select
+              variant="standard"
+              name="minExp"
+              value={filterValue.minExp}
+              onChange={(e) => handleFilter(e)}
+              MenuProps={menuProps}
+            >
+              {experienceOptions.map((option, idx) => (
+                <MenuItem key={idx} value={option.value}>
+                  {option.Label}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={3}  sx={{marginLeft: 3}}>
           <FormControl fullWidth>
-            <InputLabel>Select city</InputLabel>
-            <Select value={city} onChange={handleCityChange}>
-              <MenuItem value="">None</MenuItem>
-              <MenuItem value="city1">City 1</MenuItem>
-              <MenuItem value="city2">City 2</MenuItem>
+            <Select
+              variant="standard"
+              name="roles"
+              value={filterValue.roles}
+              onChange={(e) => handleFilter(e)}
+              MenuProps={menuProps}
+            >
+              {roleTypeOptions.map((options, idx) => (
+                <MenuItem key={idx} value={options.value}>
+                  {options.Label}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} ms={4} sm={4}  sx={{marginTop: 2, marginLeft: 3}}>
           <FormControl fullWidth>
-            <InputLabel>Select minimum experience</InputLabel>
-            <Select value={minExperience} onChange={handleMinExperienceChange}>
-              <MenuItem value="">None</MenuItem>
-              <MenuItem value="1">1 Year</MenuItem>
-              <MenuItem value="2">2 Years</MenuItem>
-            </Select>
+            <Input
+              placeholder="please Enter Company Name"
+              type="text"
+              name="compName"
+              onChange={(e) => handleFilter(e)}
+            />
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <FormControl fullWidth>
-            <InputLabel>Select maximum experience</InputLabel>
-            <Select value={maxExperience} onChange={handleMaxExperienceChange}>
-              <MenuItem value="">None</MenuItem>
-              <MenuItem value="5">5 Years</MenuItem>
-              <MenuItem value="10">10 Years</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={3} sx={{marginTop: 2, marginLeft: 3}}>
           <Button variant="contained" fullWidth onClick={handleSearch}>
             SEARCH
           </Button>
