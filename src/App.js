@@ -19,7 +19,6 @@ function App() {
   const { data, loading, error } = useSelector((state) => state.data);
   const [filterList, setFilterList] = useState([])
   const offSetRef = useRef(0);
-  console.log(filterList,"filterList",filterList.length)
 
  useEffect(()=>{
   if(data.length !==0&& data.jdList){
@@ -49,11 +48,26 @@ function App() {
   }, [handleScroll]);
 
   const handleSearch = ()=>{
-    console.log('search click....')
-    const filterDataList = data?.jdList.filter((value)=>value.location ==filterValue.jobType)
+    let filterDataList =data?.jdList;
+    if(filterValue.jobType =='remote'){
+     filterDataList= filterDataList.filter((value)=>value.location ==filterValue.jobType)
+    }if(filterValue.jobType =='onsite'){
+      filterDataList =filterDataList.filter((value)=>value.location !=='remote')
+    }if(filterValue.minExp !=='select Experience'){
+      filterDataList = filterDataList.filter((value)=>value.minExp == Number(filterValue.minExp))
+    }if(filterValue.roles !=='select Role'){
+      filterDataList = filterDataList.filter((value)=>value.jobRole == filterValue.roles)
+    }if(filterValue?.compName ){
+      filterDataList = filterDataList.filter((value)=>value.companyName.toLowerCase().includes(filterValue.compName.toLowerCase()))
+    }
+    else{
+      filterDataList =[]
+    }
+
     setFilterList(filterDataList)
-    console.log(filterDataList)
+    console.log(filterDataList,"...filtering")
   }
+console.log(filterList.length,"filterList.length")
   return (
     <Container
       maxWidth={false}
