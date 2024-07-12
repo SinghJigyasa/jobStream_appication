@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
 import { useCallback, useEffect } from "react";
 import { fetchApiData } from "./redux/slice";
-import { Container, Grid } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import { useRef, useState } from "react";
 import FilterComponent from "./component/SearchCard";
 import SearchForm from "./component/SearchCard";
@@ -22,7 +22,8 @@ function App() {
 
  useEffect(()=>{
   if(data.length !==0&& data.jdList){
-    setFilterList(data?.jdList)
+    
+    handleFilter(data?.jdList)
   }
  },[data])
   useEffect(() => {
@@ -47,8 +48,8 @@ function App() {
     };
   }, [handleScroll]);
 
-  const handleSearch = ()=>{
-    let filterDataList =data?.jdList;
+  const handleFilter = (jobList)=>{
+    let filterDataList =jobList;
     if(filterValue.jobType =='remote'){
      filterDataList= filterDataList.filter((value)=>value.location ==filterValue.jobType)
     }if(filterValue.jobType =='onsite'){
@@ -60,14 +61,13 @@ function App() {
     }if(filterValue?.compName ){
       filterDataList = filterDataList.filter((value)=>value.companyName.toLowerCase().includes(filterValue.compName.toLowerCase()))
     }
-    else{
-      filterDataList =[]
-    }
-
+  
     setFilterList(filterDataList)
-    console.log(filterDataList,"...filtering")
   }
-console.log(filterList.length,"filterList.length")
+
+const handleSearch = () => {
+  handleFilter(data?.jdList);
+};
   return (
     <Container
       maxWidth={false}
@@ -118,6 +118,9 @@ console.log(filterList.length,"filterList.length")
             justifyContent: "center",
           }}
         >
+          {filterList.length<=0 && <Typography variant="h5" color="textSecondary" align="center">
+                No data found
+              </Typography>}
           {data.length !== 0 && filterList.length !==0 &&
             filterList.map((item) => (
               <JobCard key={item.jdUid} cardData={item} />
