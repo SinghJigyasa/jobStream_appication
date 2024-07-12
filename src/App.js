@@ -7,6 +7,7 @@ import { useRef, useState } from "react";
 import FilterComponent from "./component/SearchCard";
 import SearchForm from "./component/SearchCard";
 import JobCard from "./component/JobListCard";
+import Shimmer from "./component/shimmer";
 
 function App() {
   const defaultFilterValue = {
@@ -17,15 +18,14 @@ function App() {
   const [filterValue, setFilterValue] = useState(defaultFilterValue);
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector((state) => state.data);
-  const [filterList, setFilterList] = useState([])
+  const [filterList, setFilterList] = useState([]);
   const offSetRef = useRef(0);
 
- useEffect(()=>{
-  if(data.length !==0&& data.jdList){
-    
-    handleFilter(data?.jdList)
-  }
- },[data])
+  useEffect(() => {
+    if (data.length !== 0 && data.jdList) {
+      handleFilter(data?.jdList);
+    }
+  }, [data]);
   useEffect(() => {
     dispatch(fetchApiData(offSetRef.current));
     offSetRef.current += 1;
@@ -48,26 +48,42 @@ function App() {
     };
   }, [handleScroll]);
 
-  const handleFilter = (jobList)=>{
-    let filterDataList =jobList;
-    if(filterValue.jobType =='remote'){
-     filterDataList= filterDataList.filter((value)=>value.location ==filterValue.jobType)
-    }if(filterValue.jobType =='onsite'){
-      filterDataList =filterDataList.filter((value)=>value.location !=='remote')
-    }if(filterValue.minExp !=='select Experience'){
-      filterDataList = filterDataList.filter((value)=>value.minExp == Number(filterValue.minExp))
-    }if(filterValue.roles !=='select Role'){
-      filterDataList = filterDataList.filter((value)=>value.jobRole == filterValue.roles)
-    }if(filterValue?.compName ){
-      filterDataList = filterDataList.filter((value)=>value.companyName.toLowerCase().includes(filterValue.compName.toLowerCase()))
+  const handleFilter = (jobList) => {
+    let filterDataList = jobList;
+    if (filterValue.jobType == "remote") {
+      filterDataList = filterDataList.filter(
+        (value) => value.location == filterValue.jobType
+      );
     }
-  
-    setFilterList(filterDataList)
-  }
+    if (filterValue.jobType == "onsite") {
+      filterDataList = filterDataList.filter(
+        (value) => value.location !== "remote"
+      );
+    }
+    if (filterValue.minExp !== "select Experience") {
+      filterDataList = filterDataList.filter(
+        (value) => value.minExp == Number(filterValue.minExp)
+      );
+    }
+    if (filterValue.roles !== "select Role") {
+      filterDataList = filterDataList.filter(
+        (value) => value.jobRole == filterValue.roles
+      );
+    }
+    if (filterValue?.compName) {
+      filterDataList = filterDataList.filter((value) =>
+        value.companyName
+          .toLowerCase()
+          .includes(filterValue.compName.toLowerCase())
+      );
+    }
 
-const handleSearch = () => {
-  handleFilter(data?.jdList);
-};
+    setFilterList(filterDataList);
+  };
+
+  const handleSearch = () => {
+    handleFilter(data?.jdList);
+  };
   return (
     <Container
       maxWidth={false}
@@ -118,10 +134,14 @@ const handleSearch = () => {
             justifyContent: "center",
           }}
         >
-          {filterList.length<=0 && <Typography variant="h5" color="textSecondary" align="center">
-                No data found
-              </Typography>}
-          {data.length !== 0 && filterList.length !==0 &&
+          {filterList.length <= 0 && (
+            <Typography variant="h5" color="textSecondary" align="center">
+              No data found
+            </Typography>
+          )}
+          {data.length == 0 && filterList.length == 0 && <Shimmer />}
+          {data.length !== 0 &&
+            filterList.length !== 0 &&
             filterList.map((item) => (
               <JobCard key={item.jdUid} cardData={item} />
             ))}
